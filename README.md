@@ -2,7 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
 ## Step 1: Start the Metro Server
 
@@ -68,12 +68,20 @@ You've successfully run and modified your React Native App. :partying_face:
 
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
-# Learn More
+# Errors Faced
 
-To learn more about React Native, take a look at the following resources:
+1. ERROR: JAVA_HOME is set to an invalid directory: /home/chugrothas/jdk1.7.0_71.
+   Please set the JAVA_HOME variable in your environment to match the
+   location of your Java installation.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+   You can find java home by using the following command:
+
+   java -XshowSettings:properties -version 2>&1 > /dev/null | grep 'java.home'
+   It will print something like:
+
+   java.home = /path/to/java_home
+   You can set the output of this command as JAVA_HOME by copying the path and adding the following line to your ~/.bashrc.
+
+   export JAVA_HOME=/path/to/java_home
+
+   Resource: https://askubuntu.com/questions/1259159/gradle-java-home-is-set-to-an-invalid-directory
