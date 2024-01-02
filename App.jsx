@@ -1,12 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   Pressable,
-  FlatList,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import ListView from './Components/ListView';
 
 const DATA = [
   {
@@ -46,64 +49,51 @@ const App = () => {
   const handleAddTask = () => {
     console.log('Add Task Pressed!', ref.current.value);
     const items = [...taskList];
-    items.push({id: '124', title: ref.current.value});
-    setTaskList(items);
-    console.log('Task List----', taskList);
+    if ((ref.current.value !== '') | (ref.current.value !== undefined)) {
+      items.push({id: '124', title: ref.current.value});
+      setTaskList(items);
+    }
   };
 
-  console.log('Task List----', taskList);
-
+  const DismissKeyboard = ({children}) => (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      {children}
+    </TouchableWithoutFeedback>
+  );
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}> Todo App</Text>
+    <DismissKeyboard>
+      <View style={styles.container}>
+        <Text style={styles.title}> Todo App</Text>
 
-      <View style={styles.inputTask}>
-        <TextInput
-          ref={ref}
-          onChangeText={e => {
-            ref.current.value = e;
-          }}
-          placeholder="Enter your task..."
-          placeholderTextColor={'#fff'}
-          style={{borderWidth: 1, borderRadius: 10, width: '80%'}}
-        />
-        <Pressable
-          onPress={handleAddTask}
-          style={{
-            alignSelf: 'center',
-            borderRadius: 5,
-            borderWidth: 1,
-            borderColor: '#fff',
-          }}>
-          <Text style={{fontSize: 20, margin: 6, color: '#fff'}}>Add</Text>
-        </Pressable>
-      </View>
+        <View style={styles.inputTask}>
+          <TextInput
+            ref={ref}
+            onChangeText={e => {
+              ref.current.value = e;
+            }}
+            placeholder="Enter your task..."
+            placeholderTextColor={'#fff'}
+            style={{
+              borderRadius: 10,
+              width: '80%',
+              borderColor: '#fff',
+            }}
+          />
 
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: 'green',
-          marginTop: 50,
-          marginHorizontal: 30,
-          height: 300,
-        }}>
-        <FlatList
-          data={taskList.reverse()}
-          renderItem={({item}) => {
-            return (
-              <Text
-                style={{
-                  margin: 10,
-                  textAlign: 'center',
-                  fontSize: 15,
-                }}>
-                {item.title}
-              </Text>
-            );
-          }}
-        />
+          <Pressable
+            onPress={handleAddTask}
+            style={{
+              alignSelf: 'center',
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: '#fff',
+            }}>
+            <Text style={{fontSize: 20, margin: 6, color: '#fff'}}>Add</Text>
+          </Pressable>
+        </View>
+        <ListView data={taskList} />
       </View>
-    </View>
+    </DismissKeyboard>
   );
 };
 
@@ -121,7 +111,6 @@ const styles = StyleSheet.create({
   },
   inputTask: {
     flexDirection: 'row',
-    marginTop: 50,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#fff',
