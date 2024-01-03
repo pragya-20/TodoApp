@@ -85,3 +85,6 @@ If you can't get this to work, see the [Troubleshooting](https://reactnative.dev
    export JAVA_HOME=/path/to/java_home
 
    Resource: https://askubuntu.com/questions/1259159/gradle-java-home-is-set-to-an-invalid-directory
+
+2. Add Icons: which library to use?
+   https://github.com/oblador/react-native-vector-icons. React-Native-Vector-Icons

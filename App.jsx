@@ -1,3 +1,7 @@
+import 'react-native-get-random-values';
+
+import {v4 as uuidv4} from 'uuid';
+
 import React, {useRef, useState} from 'react';
 import {
   View,
@@ -8,7 +12,6 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ListView from './Components/ListView';
 
 const DATA = [
@@ -47,10 +50,11 @@ const App = () => {
   const ref = useRef('');
 
   const handleAddTask = () => {
-    console.log('Add Task Pressed!', ref.current.value);
     const items = [...taskList];
-    if ((ref.current.value !== '') | (ref.current.value !== undefined)) {
-      items.push({id: '124', title: ref.current.value});
+    if (ref.current.value === undefined) {
+      console.log('I am undefined!');
+    } else {
+      items.push({id: uuidv4(), title: ref.current.value});
       setTaskList(items);
     }
   };
@@ -77,6 +81,7 @@ const App = () => {
               borderRadius: 10,
               width: '80%',
               borderColor: '#fff',
+              color: '#fff',
             }}
           />
 
@@ -104,9 +109,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    textAlign: 'flex-start',
     marginTop: '10%',
-    marginLeft: '10%',
+    marginHorizontal: '10%',
     color: '#ffffff',
   },
   inputTask: {
