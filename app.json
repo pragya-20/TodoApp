@@ -1,4 +1,13 @@
 {
   "name": "TodoApp",
-  "displayName": "TodoApp"
+  "displayName": "TodoApp",
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "cf6d7207-22bd-442e-8463-793c6ed58612"
+      }
+    },
+    "owner": "pb20",
+    "slug": "app-todo"
+  }
 }

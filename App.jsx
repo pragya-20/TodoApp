@@ -14,49 +14,40 @@ import {
 } from 'react-native';
 import ListView from './Components/ListView';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72121',
-    title: 'Third Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d766656',
-    title: 'Forth Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d725444',
-    title: 'Fifth Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7452',
-    title: 'Sixth Item',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Seventh Item',
-  },
-];
-
 const App = () => {
-  const [taskList, setTaskList] = useState(DATA);
+  const [taskList, setTaskList] = useState([]);
+
   const ref = useRef('');
 
   const handleAddTask = () => {
-    const items = [...taskList];
     if (ref.current.value === undefined) {
-      console.log('I am undefined!');
+      console.log('I am undefined!', taskList);
     } else {
-      items.push({id: uuidv4(), title: ref.current.value});
+      const items = [
+        {id: uuidv4(), title: ref.current.value, checked: false},
+        ...taskList,
+      ];
+
       setTaskList(items);
     }
+  };
+
+  const handleCheckboxChange = (newValue, index) => {
+    setTaskList(prevTasks => {
+      const updatedTaskList = [...prevTasks];
+
+      updatedTaskList[index].checked = newValue;
+
+      return updatedTaskList;
+    });
+  };
+
+  const handleDelete = index => {
+    setTaskList(prevTasks => {
+      const updatedTaskList = prevTasks.filter((_, i) => i !== index);
+
+      return updatedTaskList;
+    });
   };
 
   const DismissKeyboard = ({children}) => (
@@ -64,12 +55,13 @@ const App = () => {
       {children}
     </TouchableWithoutFeedback>
   );
+
   return (
     <DismissKeyboard>
       <View style={styles.container}>
         <Text style={styles.title}> Todo App</Text>
 
-        <View style={styles.inputTask}>
+        <View style={styles.inputTaskContainer}>
           <TextInput
             ref={ref}
             onChangeText={e => {
@@ -77,26 +69,20 @@ const App = () => {
             }}
             placeholder="Enter your task..."
             placeholderTextColor={'#fff'}
-            style={{
-              borderRadius: 10,
-              width: '80%',
-              borderColor: '#fff',
-              color: '#fff',
-            }}
+            style={styles.taskInputStyle}
+            multiline
           />
 
-          <Pressable
-            onPress={handleAddTask}
-            style={{
-              alignSelf: 'center',
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: '#fff',
-            }}>
-            <Text style={{fontSize: 20, margin: 6, color: '#fff'}}>Add</Text>
+          <Pressable onPress={handleAddTask} style={styles.buttonStyle}>
+            <Text style={styles.buttonTextStyle}>Add</Text>
           </Pressable>
         </View>
-        <ListView data={taskList} />
+
+        <ListView
+          data={taskList}
+          handleCheckboxChange={handleCheckboxChange}
+          handleDelete={handleDelete}
+        />
       </View>
     </DismissKeyboard>
   );
@@ -105,21 +91,42 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     backgroundColor: '#1E1B3C',
   },
+
   title: {
     fontSize: 20,
+
     marginTop: '10%',
+
     marginHorizontal: '10%',
+
     color: '#ffffff',
   },
-  inputTask: {
+
+  inputTaskContainer: {
     flexDirection: 'row',
     borderWidth: 1,
     borderRadius: 10,
     borderColor: '#fff',
     margin: 40,
+    alignContent: 'center',
+    justifyContent: 'space-between',
   },
+  taskInputStyle: {
+    borderRadius: 10,
+    width: '80%',
+    borderColor: '#fff',
+    color: '#fff',
+    marginHorizontal: 10,
+  },
+  buttonStyle: {
+    height: 50,
+    borderRadius: 10,
+    justifyContent: 'center',
+  },
+  buttonTextStyle: {fontSize: 20, margin: 6, color: '#fff'},
 });
 
 export default App;

@@ -1,53 +1,39 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, FlatList, Text, Pressable, StyleSheet} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const ListView = ({data}) => {
-  const tasks = data;
-  const [toggelCheckbox, setCheckbox] = useState(false);
-
-  const handleCheckboxChange = (itemId, newValue) => {
-    setCheckbox(prevState => ({
-      ...prevState,
-      [itemId]: newValue,
-    }));
-  };
-
-  const handleDelete = itemId => {};
-
+const ListView = ({data, handleDelete, handleCheckboxChange}) => {
   return (
     <View style={styles.listContainer}>
       <FlatList
-        data={tasks}
-        renderItem={({item}) => {
-          const itemId = `${item.id}`;
-          const isChecked = toggelCheckbox[itemId] || false;
+        data={data}
+        renderItem={({item, index}) => {
+          const isChecked = item.checked || false;
+
           return (
             <View style={styles.listItemContainer}>
               <CheckBox
                 disabled={false}
                 value={isChecked}
                 onValueChange={newValue => {
-                  handleCheckboxChange(itemId, newValue);
+                  handleCheckboxChange(newValue, index);
                 }}
-                tintColors={true ? 'red' : '#fff'}
                 style={styles.alignCheckbox}
+                tintColors={{false: '#fff'}}
               />
               <Text style={styles.alignItemContent}>{item.title}</Text>
               <Pressable
                 style={styles.alignIcon}
                 onPress={() => {
-                  console.log('Itemm in Pressable', itemId);
-                  handleDelete(itemId);
+                  handleDelete(index);
                 }}>
                 <Icon name="delete" size={30} color="#fff" />
               </Pressable>
             </View>
           );
         }}
-        inverted
-        keyExtractor={(item, index) => `${index}`}
+        keyExtractor={(_, index) => `${index}`}
       />
     </View>
   );
@@ -71,14 +57,18 @@ const styles = StyleSheet.create({
   },
   alignCheckbox: {
     alignSelf: 'center',
+    marginLeft: 10,
+    borderColor: '#fff',
   },
   alignItemContent: {
     fontSize: 18,
     margin: 10,
     textAlignVertical: 'center',
+    textAlign: 'center',
     color: '#fff',
+    width: '80%',
   },
-  alignIcon: {alignSelf: 'center'},
+  alignIcon: {alignSelf: 'center', marginRight: 10},
 });
 
 export default ListView;
